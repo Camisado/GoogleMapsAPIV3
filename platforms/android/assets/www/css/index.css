@@ -19,3 +19,31 @@
 html { height: 100% }
 body { height: 100%; margin: 0; padding: 0 }
 #map_canvas { height: 70% }
+
+.mylocation-button {
+    border-radius: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    display: block;
+    width: 29px;
+    height: 29px;
+    overflow: hidden;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font: inherit;
+    vertical-align: baseline;
+    background: transparent;
+    list-style: none;
+    color: inherit;
+    -webkit-box-sizing: border-box;
+    -webkit-transition-duration: 0.16s;
+    -webkit-transition-property: background-color;
+    -webkit-transition-timing-function: ease-out;
+}
+
+.mylocation-button-img {
+    width: 29px;
+    height: 29px;
+}

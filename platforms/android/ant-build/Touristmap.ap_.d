@@ -35,7 +35,10 @@ D:\phonegap\GoogleMapsAPIV3\platforms\android\assets\www\spec \
 D:\phonegap\GoogleMapsAPIV3\platforms\android\assets\www\spec.html \
 D:\phonegap\GoogleMapsAPIV3\platforms\android\assets\www\css\foundation.min.css \
 D:\phonegap\GoogleMapsAPIV3\platforms\android\assets\www\css\index.css \
+D:\phonegap\GoogleMapsAPIV3\platforms\android\assets\www\img\icons \
 D:\phonegap\GoogleMapsAPIV3\platforms\android\assets\www\img\logo.png \
+D:\phonegap\GoogleMapsAPIV3\platforms\android\assets\www\img\icons\location-centered.png \
+D:\phonegap\GoogleMapsAPIV3\platforms\android\assets\www\img\icons\location.png \
 D:\phonegap\GoogleMapsAPIV3\platforms\android\assets\www\js\index.js \
 D:\phonegap\GoogleMapsAPIV3\platforms\android\assets\www\res\icon \
 D:\phonegap\GoogleMapsAPIV3\platforms\android\assets\www\res\screen \

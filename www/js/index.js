@@ -37,11 +37,11 @@ var app = {
     },
     // Update DOM on a Received Event
     receivedEvent: function() {
-        mapController.initialize();
+        globalMap.initialize();
     }
 };
 
-var mapController = {
+var globalMap = {
     MY_LOCATION: {
         lat: 0,
         lng: 0
@@ -52,18 +52,27 @@ var mapController = {
             center: new google.maps.LatLng(this.MY_LOCATION.lat, this.MY_LOCATION.lng),
             zoom: 6,
             mapTypeId: google.maps.MapTypeId.ROADMAP,
+            panControl: false,
             zoomControl: true,
             mapTypeControl: true,
-            scaleControl: true,
-            rotateControl: true
+            scaleControl: false,
+            streetViewControl: false,
+            overviewMapControl: false
         };
+
         var map = new google.maps.Map(document.getElementById("map_canvas"),
             mapOptions);
         var myLocButton = document.getElementById("myLoc");
         myLocButton.addEventListener("click", function() {
             self.getMyPosition(map);
         }, false);
-    },
+
+        var homeControlDiv = document.createElement('div');
+        var myLocationControl = new mapControls.myLocationControl(homeControlDiv, self, map);
+
+        homeControlDiv.index = 1;
+        map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(homeControlDiv);
+    }/*,
     getMyPosition: function(map) {
         var self = this;
         if (navigator.geolocation) {
@@ -84,7 +93,7 @@ var mapController = {
                 map: map,
                 position: pos,
                 content: "I'm here!"
-            });*/
+            });
 
             var marker = new google.maps.Marker({
                 position: pos,
@@ -97,5 +106,62 @@ var mapController = {
         function errorPosition(msg) {
             alert("Fail get position: " + msg);
         }
+    }*/
+};
+
+var mapControls = {
+    myLocationControl: function(controlDiv, globalMap, map) {
+
+        controlDiv.style.margin = "5px";
+        controlDiv.style.padding = "5px";
+
+        var controlUI = document.createElement("div");
+        controlUI.className = "mylocation-button";
+        controlUI.title = "Move to my location";
+        controlDiv.appendChild(controlUI);
+
+        var controlImage = document.createElement("img");
+        controlImage.className = "mylocation-button-img";
+        controlImage.src = "img/icons/location.png";
+        controlUI.appendChild(controlImage);
+
+        function getMyPosition() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(successPosition, errorPosition);
+            } else {
+                alert("Geolocation not supported!");
+            }
+
+            function successPosition(position) {
+
+                console.log(globalMap.MY_LOCATION.lat + ", " + globalMap.MY_LOCATION.lng);
+                globalMap.MY_LOCATION.lat = position.coords.latitude;
+                globalMap.MY_LOCATION.lng = position.coords.longitude;
+                console.log(globalMap.MY_LOCATION.lat + ", " + globalMap.MY_LOCATION.lng);
+                var pos = new google.maps.LatLng(position.coords.latitude,
+                    position.coords.longitude);
+
+                /*var infowindow = new google.maps.InfoWindow({
+                 map: map,
+                 position: pos,
+                 content: "I'm here!"
+                 });
+
+                var marker = new google.maps.Marker({
+                    position: pos,
+                    title: "I'm here!"
+                });
+                marker.setMap(map);*/
+                map.panTo(pos);
+            }
+
+            function errorPosition(msg) {
+                alert("Fail get position: " + msg);
+            }
+        }
+
+        google.maps.event.addDomListener(controlUI, 'click', function() {
+            getMyPosition(map);
+        });
     }
 };
