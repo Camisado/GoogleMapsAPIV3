@@ -21,6 +21,7 @@ body { height: 100%; margin: 0; padding: 0 }
 #map_canvas { height: 70% }
 
 .mylocation-button {
+    background-color: rgba(255,255,255,0.5);
     border-radius: 2px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.3);
     display: block;
@@ -34,7 +35,7 @@ body { height: 100%; margin: 0; padding: 0 }
     outline: 0;
     font: inherit;
     vertical-align: baseline;
-    background: transparent;
+    /*background: transparent;*/
     list-style: none;
     color: inherit;
     -webkit-box-sizing: border-box;

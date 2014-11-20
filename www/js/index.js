@@ -44,7 +44,8 @@ var app = {
 var globalMap = {
     MY_LOCATION: {
         lat: 0,
-        lng: 0
+        lng: 0,
+        marker: null
     },
     initialize: function() {
         var self = this;
@@ -62,56 +63,16 @@ var globalMap = {
 
         var map = new google.maps.Map(document.getElementById("map_canvas"),
             mapOptions);
-        var myLocButton = document.getElementById("myLoc");
-        myLocButton.addEventListener("click", function() {
-            self.getMyPosition(map);
-        }, false);
 
         var homeControlDiv = document.createElement('div');
         var myLocationControl = new mapControls.myLocationControl(homeControlDiv, self, map);
-
         homeControlDiv.index = 1;
         map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(homeControlDiv);
-    }/*,
-    getMyPosition: function(map) {
-        var self = this;
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(successPosition, errorPosition);
-        } else {
-            alert("Geolocation not supported!");
-        }
-
-        function successPosition(position) {
-            console.log(self.MY_LOCATION.lat + ", " + self.MY_LOCATION.lng);
-            self.MY_LOCATION.lat = position.coords.latitude;
-            self.MY_LOCATION.lng = position.coords.longitude;
-            console.log(self.MY_LOCATION.lat + ", " + self.MY_LOCATION.lng);
-            var pos = new google.maps.LatLng(position.coords.latitude,
-                position.coords.longitude);
-
-            /*var infowindow = new google.maps.InfoWindow({
-                map: map,
-                position: pos,
-                content: "I'm here!"
-            });
-
-            var marker = new google.maps.Marker({
-                position: pos,
-                title: "I'm here!"
-            });
-            marker.setMap(map);
-            map.panTo(pos);
-        }
-
-        function errorPosition(msg) {
-            alert("Fail get position: " + msg);
-        }
-    }*/
+    }
 };
 
 var mapControls = {
     myLocationControl: function(controlDiv, globalMap, map) {
-
         controlDiv.style.margin = "5px";
         controlDiv.style.padding = "5px";
 
@@ -133,26 +94,36 @@ var mapControls = {
             }
 
             function successPosition(position) {
-
-                console.log(globalMap.MY_LOCATION.lat + ", " + globalMap.MY_LOCATION.lng);
+                //console.log(globalMap.MY_LOCATION.lat + ", " + globalMap.MY_LOCATION.lng);
                 globalMap.MY_LOCATION.lat = position.coords.latitude;
                 globalMap.MY_LOCATION.lng = position.coords.longitude;
-                console.log(globalMap.MY_LOCATION.lat + ", " + globalMap.MY_LOCATION.lng);
-                var pos = new google.maps.LatLng(position.coords.latitude,
-                    position.coords.longitude);
+                //console.log(globalMap.MY_LOCATION.lat + ", " + globalMap.MY_LOCATION.lng);
+                var myPos = new google.maps.LatLng(globalMap.MY_LOCATION.lat,
+                    globalMap.MY_LOCATION.lng);
 
                 /*var infowindow = new google.maps.InfoWindow({
                  map: map,
                  position: pos,
                  content: "I'm here!"
-                 });
+                 });*/
 
                 var marker = new google.maps.Marker({
-                    position: pos,
-                    title: "I'm here!"
+                    position: myPos,
+                    title: "I'm here!",
+                    icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
                 });
-                marker.setMap(map);*/
-                map.panTo(pos);
+                if(globalMap.MY_LOCATION.marker === null) {
+                    //console.log("if");
+                    marker.setMap(map);
+                    globalMap.MY_LOCATION.marker = marker;
+                } else {
+                    //console.log("else");
+                    globalMap.MY_LOCATION.marker.setMap(null);
+                    marker.setMap(map);
+                    globalMap.MY_LOCATION.marker = marker;
+                }
+
+                map.panTo(myPos);
             }
 
             function errorPosition(msg) {
@@ -162,6 +133,22 @@ var mapControls = {
 
         google.maps.event.addDomListener(controlUI, 'click', function() {
             getMyPosition(map);
+        });
+
+        google.maps.event.addListener(map, 'center_changed', function() {
+            // 3 seconds after the center of the map has changed, pan back to the
+            // marker.
+            //console.log(map.getCenter());
+            var mapCenter = map.getCenter();
+            var myLoc = new google.maps.LatLng(globalMap.MY_LOCATION.lat, globalMap.MY_LOCATION.lng)
+            //console.log(mapCenter + " " + myLoc);
+            if(mapCenter.equals(myLoc)) {
+                //console.log("true");
+                controlImage.src = "img/icons/location-centered.png";
+            } else {
+                //console.log("false");
+                controlImage.src = "img/icons/location.png";
+            }
         });
     }
 };
